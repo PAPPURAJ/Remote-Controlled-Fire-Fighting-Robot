@@ -77,7 +77,7 @@ void autoDrive() {
   Serial.println("Auto");
   delay(300);
 
-  getSensor();
+getSensor();
 
   Serial.print("Front: " + String(fV) + " | Back: " + String(bV) + " | Left: " + String(lV) + " | Right: " + String(rV) + "   |   ");
   getDistance();
@@ -86,38 +86,38 @@ void autoDrive() {
   if (lV || bV)
   {
     left();
-    delay(1700);
+    delay(700);
     off();
   }
   else if (rV) {
     right();
-    delay(1700);
+    delay(700);
     off();
   }
 
   else if (fV) {
 
     while (fV) {
-      Serial.println("Distance: " + String(distance));
+      Serial.println("Distance: "+String(distance));
       getSensor();
       getDistance();
       if (distance > minDis) {
         front();
       } else {
         off();
-        if (fV) {
+        if(fV){
           pumpOn();
-        } else {
-          pumpOff();
-          break;
+        }else{
+           pumpOff();
+           break;
         }
       }
     }
 
 
-  } else {
-    off();
-    pumpOff();
+  }else{
+      off();
+      pumpOff();
   }
 
 
@@ -159,8 +159,8 @@ void manualDrive(int val) {
 }
 
 
-void getSensor() {
-  fV = !digitalRead(frontIR);
+void getSensor(){
+    fV = !digitalRead(frontIR);
   bV = !digitalRead(backIR);
   lV = !digitalRead(leftIR);
   rV = !digitalRead(rightIR);
@@ -184,7 +184,7 @@ void back() {
 
 void left() {
   digitalWrite(leftFront, 0);
-  digitalWrite(leftBack, 0);
+  digitalWrite(leftBack, 1);
   digitalWrite(rightFront, 1);
   digitalWrite(rightBack, 0);
   Serial.println("Left");
@@ -194,7 +194,7 @@ void right() {
   digitalWrite(leftFront, 1);
   digitalWrite(leftBack, 0);
   digitalWrite(rightFront, 0);
-  digitalWrite(rightBack, 0);
+  digitalWrite(rightBack, 1);
   Serial.println("Right");
 }
 
@@ -224,4 +224,5 @@ void getDistance() {
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   distance =  pulseIn(echoPin, HIGH) * (0.034 / 2) * 10;
-  Serial.println(String(distance))
+  Serial.println(String(distance));
+}
